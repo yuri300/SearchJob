@@ -1,0 +1,16 @@
+.vs
+SearchJob/bin
+SearchJob/obj
+SearchJob/Properties
+wwwroot
+appsettings.Development.json
+appsettings.json
+bundleconfig.json
+Program.cs
+SearchJobWeb.csproj
+SearchJobWeb.csproj.user
+Startup.cs
+Persistence
+Model
+Business
+ProjetoTDI.sln
