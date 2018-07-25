@@ -10,7 +10,13 @@ Program.cs
 SearchJobWeb.csproj
 SearchJobWeb.csproj.user
 Startup.cs
-Persistence
-Model
-Business
 ProjetoTDI.sln
+Business/bin
+Business/obj
+Business/Business.csproj
+Persistence/bin
+Persistence/obj
+Persistence/Persistence.csproj
+Model/bin
+Model/obj
+Model/Model.csproj

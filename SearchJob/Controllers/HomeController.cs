@@ -12,6 +12,7 @@ namespace SearchJob.Controllers
     {
         public IActionResult Index()
         {
+            ViewData["aaa"] = "Index";
             return View();
         }
 
