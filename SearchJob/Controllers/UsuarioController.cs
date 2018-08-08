@@ -2,27 +2,45 @@
 using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
+using Business.Business;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
+using Microsoft.AspNetCore.Mvc.ModelBinding;
+using Microsoft.AspNetCore.Mvc.ModelBinding.Metadata;
+using Model.Models;
 
 namespace SearchJobWeb.Controllers
 {
+    
     public class UsuarioController : Controller
     {
+        private GerenciadorUsuario gu;
+        public UsuarioController() => gu = new GerenciadorUsuario();
+
         // GET: Usuario
-        public ActionResult Index()
+        public IActionResult Index()
         {
+            /*List<Usuario> model = gu.ObterTodos();
+            if (model.Count == 0)
+                model = null;*/
+            //return View(model);
             return View();
         }
 
         // GET: Usuario/Details/5
-        public ActionResult Details(int id)
+        public IActionResult Details(int? id)
         {
-            return View();
+            if (id.HasValue)
+            {
+                Usuario usuario = gu.ObterById(id);
+                if (usuario != null)
+                    return View(usuario);
+            }
+            return RedirectToAction("Index");
         }
 
         // GET: Usuario/Create
-        public ActionResult Create()
+        public IActionResult Create()
         {
             return View();
         }
@@ -30,64 +48,75 @@ namespace SearchJobWeb.Controllers
         // POST: Usuario/Create
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public ActionResult Create(IFormCollection collection)
+        public IActionResult Create(Usuario usuario)
         {
-            try
-            {
-                // TODO: Add insert logic here
-
-                return RedirectToAction(nameof(Index));
-            }
-            catch
-            {
-                return View();
-            }
+            if (ModelState.IsValid)
+                gu.Adicionar(usuario);
+            return RedirectToAction("Index");
         }
 
         // GET: Usuario/Edit/5
-        public ActionResult Edit(int id)
+        public IActionResult Edit(int? id)
         {
-            return View();
+            if (id.HasValue)
+            {
+                Usuario usuario = gu.ObterById(id);
+                if (usuario != null)
+                    return View(usuario);
+            }
+            return RedirectToAction("Index");
         }
 
         // POST: Usuario/Edit/5
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public ActionResult Edit(int id, IFormCollection collection)
+        public IActionResult Edit(Usuario usuario)
         {
-            try
+            if (ModelState.IsValid)
             {
-                // TODO: Add update logic here
-
-                return RedirectToAction(nameof(Index));
+                ModelState.Remove("Id");
+                gu.Editar(usuario);
+                return RedirectToAction("Index");
             }
-            catch
-            {
-                return View();
-            }
+            return View(usuario);
         }
 
         // GET: Usuario/Delete/5
-        public ActionResult Delete(int id)
+        public IActionResult DeleteAccount(int? id)
         {
-            return View();
+            if (id.HasValue)
+            {
+                Usuario u = gu.ObterById(id);
+                if (u != null)
+                    return View(u);
+            }
+            return RedirectToAction("Index");
         }
 
         // POST: Usuario/Delete/5
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public ActionResult Delete(int id, IFormCollection collection)
+        public IActionResult DeleteAccount(int id)
         {
-            try
+            if (ModelState.IsValid)
             {
-                // TODO: Add delete logic here
-
-                return RedirectToAction(nameof(Index));
+                gu.Remover(id);
             }
-            catch
-            {
-                return View();
-            }
+            return RedirectToAction("Index");
         }
+
+
+        //[HttpPost]
+        [ValidateAntiForgeryToken]
+        //[HttpPost,Route("Usuario/PesquisarProfissao/{profissao}")]
+        [HttpPost]
+        public IActionResult PesquisarProfissao(FormPesquisar profissao)
+        {
+            
+            List<Usuario> model = gu.ObterTodosByEmprego(profissao.CampoPesquisar);
+            if (model.Count == 0)
+                model = null;
+            return View(model);
+        }        
     }
 }
