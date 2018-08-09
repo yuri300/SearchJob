@@ -18,16 +18,23 @@ namespace SearchJobWeb.Controllers
         public UsuarioController() => gu = new GerenciadorUsuario();
 
         // GET: Usuario
+
         public IActionResult Index()
         {
-            /*List<Usuario> model = gu.ObterTodos();
-            if (model.Count == 0)
-                model = null;*/
-            //return View(model);
             return View();
         }
 
+        public IActionResult ListarUsuarios()
+        {
+            List<Usuario> model = gu.ObterTodos();
+            if (model.Count == 0)
+                model = null;
+            return View(model);
+            
+        }
+
         // GET: Usuario/Details/5
+        [Route("/Usuario/ListarUsuarios/Details/{id}")]
         public IActionResult Details(int? id)
         {
             if (id.HasValue)
@@ -36,7 +43,7 @@ namespace SearchJobWeb.Controllers
                 if (usuario != null)
                     return View(usuario);
             }
-            return RedirectToAction("Index");
+            return RedirectToAction("ListarUsuarios", "Usuario");
         }
 
         // GET: Usuario/Create
@@ -52,7 +59,7 @@ namespace SearchJobWeb.Controllers
         {
             if (ModelState.IsValid)
                 gu.Adicionar(usuario);
-            return RedirectToAction("Index");
+            return RedirectToAction("Index", "Home");
         }
 
         // GET: Usuario/Edit/5
@@ -64,7 +71,7 @@ namespace SearchJobWeb.Controllers
                 if (usuario != null)
                     return View(usuario);
             }
-            return RedirectToAction("Index");
+            return RedirectToAction("ListarUsuarios","Usuario");
         }
 
         // POST: Usuario/Edit/5
@@ -76,7 +83,7 @@ namespace SearchJobWeb.Controllers
             {
                 ModelState.Remove("Id");
                 gu.Editar(usuario);
-                return RedirectToAction("Index");
+                return RedirectToAction("ListarUsuarios", "Usuario");
             }
             return View(usuario);
         }
@@ -90,7 +97,7 @@ namespace SearchJobWeb.Controllers
                 if (u != null)
                     return View(u);
             }
-            return RedirectToAction("Index");
+            return RedirectToAction("ListarUsuarios", "Usuario");
         }
 
         // POST: Usuario/Delete/5
@@ -102,7 +109,7 @@ namespace SearchJobWeb.Controllers
             {
                 gu.Remover(id);
             }
-            return RedirectToAction("Index");
+            return RedirectToAction("ListarUsuarios", "Usuario");
         }
 
 
